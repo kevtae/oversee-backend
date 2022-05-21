@@ -41,6 +41,25 @@ exports.createNode = async (req, res) => {
   }
 };
 
+exports.getNode = async (req, res) => {
+  try {
+    const query = await pool.query(`SELECT * FROM NODE`);
+    result = query.node;
+
+    res.status(200).json({
+      status: "success query",
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: error,
+    });
+  }
+};
+
 exports.updateNode = async (req, res) => {
   try {
     const transactionId = req.params.transactionId;
