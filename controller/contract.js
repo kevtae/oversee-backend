@@ -1,15 +1,24 @@
 const axios = require("axios");
 const Promise = require("promise");
-const { Pool } = require("pg");
+const { Client } = require("pg");
 const convert = require("ether-converter");
 
-const pool = new Pool({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  passowrd: process.env.PGPASSWORD,
-  port: process.env.PGPORT,
+const pool = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
+
+pool.connect();
+
+// const pool = new Pool({
+//   user: process.env.PGUSER,
+//   host: process.env.PGHOST,
+//   database: process.env.PGDATABASE,
+//   passowrd: process.env.PGPASSWORD,
+//   port: process.env.PGPORT,
+// });
 
 //test case -> if they call this function more than once
 exports.initialContract = async (req, res) => {
@@ -70,8 +79,7 @@ exports.initialContract = async (req, res) => {
           date.toISOString() +
           "&limit=5",
         headers: {
-          Authorization:
-            "Bearer eyJraWQiOiJXamtSRnBWaE1KZ3hKX2hIZ3c2VzRPa3JyQWtJVGxFYS1ieU5UbkllTXdrIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULk1NSDlNMjNUR2kxbDMyQ1V0ZzNhWXB6cHFTS2ZROVlkZjdOWlpBdlI3TnciLCJpc3MiOiJodHRwczovL3Nzby5sdWtrYS50ZWNoL29hdXRoMi9hdXMxaW1vMmZxY3g1SWs0UTBoOCIsImF1ZCI6ImFwaTovL3ByaWNpbmciLCJpYXQiOjE2NTMxNjA2NTUsImV4cCI6MTY1MzI0NzA1NSwiY2lkIjoiMG9hMW9tbGlhN2h6ZDU3NTkwaDgiLCJzY3AiOlsicHJpY2luZyJdLCJzdWIiOiIwb2Exb21saWE3aHpkNTc1OTBoOCJ9.lYUZj8iTBWe9L56YuVY_JDY2MTlPvT9DkpTaZp-lDchtwGzY9xeUFFKinp9E3eXX3SaOte2TrTx5eTjRHN-KUneyeoqop8brDS1ctGwTuruqouXmQ9-pefeaVStXLyF8ndhw_7L9GbVAgBQDlTKAebFgBBhyy2FwLlhQIbMgBKrXRZ4Hg-joouHQqAOuW78tTg48RSS9EAFQCPK6ojLPqSkWlf87-CcTqGwt53f-PriNkwJFPMQv8WMgj_P8oqudnZUz9AFX-AbIeksLxnNDz4LWz-dZ2nGetHl8mHZcdTTvq1Sq6cPFYieUaDCbiAdttZ8zPuVEblvUG-h8z9vxBg",
+          Authorization: `Bearer ${process.env.LUKKATOKEN}`,
         },
       };
 
