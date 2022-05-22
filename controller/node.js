@@ -91,10 +91,10 @@ exports.updateNode = async (req, res) => {
 
     await pool.query(
       `update edge
-        set label = 'total value:'||(select SUM(usdcPrice)
+        set edgelabel = 'total value:'||(select SUM(usdcPrice)
         FROM transaction
         where nodeId = ${nodeId})
-        where target = ${nodeId}`
+        where edgetarget = ${nodeId}`
     );
 
     // const newNode = await pool.query(
