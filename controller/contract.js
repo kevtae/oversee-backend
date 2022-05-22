@@ -126,6 +126,21 @@ exports.initialContract = async (req, res) => {
       });
     }
 
+    async function createNode() {
+      await pool.query(
+        `INSERT INTO NODE(nodeName, url, description, nodePosition, nodeType, nodeLabel)\
+            VALUES ('CONTRIBUTORS','https://www.dypeapp.com','DAO Contributors','{ "x": 750, "y": 200 }','transactions','CONTRIBUTORS')`
+      );
+      await pool.query(
+        `INSERT INTO NODE(nodeName, url, description, nodePosition, nodeType, nodeLabel)\
+            VALUES ('INVESTORS','https://www.dypeapp.com','DAO Investors','{ "x": -450, "y": 200 }','transactions','INVESTORS')`
+      );
+      await pool.query(
+        `INSERT INTO NODE(nodeName, url, description, nodePosition, nodeType, nodeLabel)\
+            VALUES ('TREASUREY','https://www.dypeapp.com','DAO Contract Address','{ "x": 300, "y": 50 }','address','TREASUREY')`
+      );
+    }
+
     async function getBalance() {
       var eth;
       var usdc;
@@ -145,6 +160,7 @@ exports.initialContract = async (req, res) => {
 
     internalTx();
     tokenTx();
+    createNode();
     const balance = await getBalance();
     const query = await pool.query(`SELECT * FROM TRANSACTION`);
     const result = query.rows;
