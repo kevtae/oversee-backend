@@ -183,3 +183,24 @@ exports.initialContract = async (req, res) => {
     });
   }
 };
+
+exports.getTransaction = async (req, res) => {
+  try {
+    const query = await pool.query(`SELECT * FROM TRANSACTION`);
+    const result = query.rows;
+
+    console.log(result);
+
+    res.status(200).json({
+      status: "success query",
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: error,
+    });
+  }
+};
