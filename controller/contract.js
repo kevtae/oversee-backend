@@ -51,8 +51,8 @@ exports.initialContract = async (req, res) => {
     };
 
     function getNodeType(from) {
-      if (from === req.params.id) {
-        return 2;
+      if (from === "0xe4762eacebdb7585d32079fdcba5bb94eb5d76f2") {
+        return 3;
       } else {
         return 1;
       }
@@ -95,7 +95,7 @@ exports.initialContract = async (req, res) => {
       await axios(internaltx).then(function (response) {
         const result = response.data.result;
         result.forEach(async (element) => {
-          const node = await getNodeType(element.sentFrom);
+          const node = await getNodeType(element.from);
           const value = await convertValue(element.value, "eth");
 
           const usdcValue = await convertTokenToStable(
@@ -169,8 +169,6 @@ exports.initialContract = async (req, res) => {
     const query = await pool.query(`SELECT * FROM TRANSACTION`);
     const result = query.rows;
 
-    console.log(result);
-
     res.status(200).json({
       status: "success query",
       data: {
@@ -207,7 +205,7 @@ exports.getTransaction = async (req, res) => {
 
     function convertValue(number, tokenName) {
       if (tokenName === "eth") {
-        return Math.round(convert(number, "wei", "gwei"));
+        return Math.round(convert(number, "wei", "ether"));
       } else if (tokenName === "USDC" || "USDT") {
         return Math.round(number / 1000000);
       } else if (tokenName === "KRAUSE") {
