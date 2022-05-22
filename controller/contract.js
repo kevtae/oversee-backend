@@ -120,7 +120,7 @@ exports.initialContract = async (req, res) => {
 
           await pool.query(
             `INSERT INTO TRANSACTION(blockNumber, timeStamp,hash,sentFrom,sentTo,contractAddress,sentValue,tokenName,tokenSymbol,gas,gasUsed,sentType,nodeId)\
-              VALUES (${element.blockNumber},${element.timeStamp},'${element.hash}','${element.from}','${element.to}','${element.contractAddress}','${value}','${element.tokenName}','${element.tokenSymbol}','${element.gas}','${element.gasUsed}','erc20','${node}')`
+              VALUES (${element.blockNumber},${element.timeStamp},'${element.hash}','${element.from}','${element.to}','${element.contractAddress}','${value}','${element.tokenName}','${element.tokenSymbol}','${element.gas}','${element.gasUsed}','erc20','${value}','${node}')`
           );
         });
       });
@@ -141,6 +141,9 @@ exports.initialContract = async (req, res) => {
       );
 
       /// need to put edge query here later
+      await pool.query(`INSERT INTO EDGE(edgeSource,edgeTarget) VALUES (2,3)`);
+
+      await pool.query(`INSERT INTO EDGE(edgeSource,edgeTarget) VALUES (3,1)`);
     }
 
     async function getBalance() {

@@ -26,9 +26,13 @@ exports.createNode = async (req, res) => {
 
     const positionJSON = JSON.stringify(position);
 
-    await pool.query(
+    const node = await pool.query(
       `INSERT INTO NODE(nodeName, url, description, nodePosition, nodeType, nodeLabel)\
-          VALUES ('${nodeName}','${linkUrl}','${description}','${positionJSON}','${type}','${label}')`
+          VALUES ('${nodeName}','${linkUrl}','${description}','${positionJSON}','${type}','${label}') RETURNING nodeId`
+    );
+
+    await pool.query(
+      `INSERT INTO EDGE(edgeSource,edgeTarget) VALUES (3,${node.rows[0].nodeid})`
     );
 
     res.status(200).json({
@@ -77,6 +81,14 @@ exports.updateNode = async (req, res) => {
           `
       );
     });
+
+    await pool.query(
+      `update edge
+        set label = 'total value:'||(select SUM(usdcPrice)
+        FROM transaction
+        where nodeId = ${nodeId})
+        where target = ${nodeId}`
+    );
 
     res.status(200).json({
       status: "success query",

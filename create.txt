@@ -1,0 +1,41 @@
+CREATE TABLE EDGE(
+  nodeId SERIAL PRIMARY KEY,
+  edgeSource INT,
+  edgeTarget INT,
+  edgeLabel VARCHAR(50),
+  edgeValue BIGINT,
+  FOREIGN KEY(edgeTarget)
+	REFERENCES NODE(nodeId),
+  FOREIGN KEY(edgeSource)
+	REFERENCES NODE(nodeId)
+);
+
+CREATE TABLE TRANSACTION(
+  id SERIAL PRIMARY KEY,
+  blockNumber INT NOT NULL,
+  timeStamp INTEGER,
+  hash VARCHAR(1000),
+  sentFrom VARCHAR(100),
+  sentTo VARCHAR(100),
+  contractAddress VARCHAR(100),
+  sentValue bigint,
+  tokenName VARCHAR(50),
+  tokenSymbol VARCHAR(50),
+  gas BIGINT,
+  gasUsed BIGINT,
+  sentType VARCHAR(50),
+  nodeId INT,
+  usdcPrice bigint,
+  FOREIGN KEY(nodeID)
+	REFERENCES NODE(nodeId)
+);
+
+CREATE TABLE NODE(
+  nodeId SERIAL PRIMARY KEY,
+  nodeName VARCHAR(50),
+  url VARCHAR(300),
+  description VARCHAR(1000),
+  nodePosition json,
+  nodeType VARCHAR(50),
+  nodeLabel VARCHAR(50)
+);
