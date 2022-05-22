@@ -186,14 +186,55 @@ exports.initialContract = async (req, res) => {
 
 exports.getTransaction = async (req, res) => {
   try {
+    var tokenBalance = {
+      method: "get",
+      url: "https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&tag=latest&apikey=YH44N5HPVRBS8ARQEHJVR1MENPMA157HS6&address=0xE4762eAcEbDb7585D32079fdcbA5Bb94eb5d76F2",
+      headers: {},
+    };
+
+    var ethBalance = {
+      method: "get",
+      url: "https://api.etherscan.io/api?module=account&action=balance&tag=latest&apikey=YH44N5HPVRBS8ARQEHJVR1MENPMA157HS6&address=0xE4762eAcEbDb7585D32079fdcbA5Bb94eb5d76F2",
+      headers: {},
+    };
     const query = await pool.query(`SELECT * FROM TRANSACTION`);
     const result = query.rows;
 
-    console.log(result);
+    function convertValue(number, tokenName) {
+      if (tokenName === "eth") {
+        return Math.round(convert(number, "wei", "gwei"));
+      } else if (tokenName === "USDC" || "USDT") {
+        return Math.round(number / 1000000);
+      } else if (tokenName === "KRAUSE") {
+        return Math.round(number / 100000000000000000000000000000000000000000);
+      }
+    }
+
+    async function getBalance() {
+      var eth;
+      var usdc;
+
+      await axios(tokenBalance).then(function (response) {
+        usdc = response.data.result;
+      });
+
+      await axios(ethBalance).then(function (response) {
+        eth = response.data.result;
+      });
+      const newEth = await convertValue(eth, "eth");
+      const newUsdc = await convertValue(usdc, "USDC");
+
+      return [newEth, newUsdc];
+    }
+    const balance = await getBalance();
 
     res.status(200).json({
       status: "success query",
       data: {
+        balance: {
+          eth: balance[0],
+          usdc: balance[1],
+        },
         result,
       },
     });
