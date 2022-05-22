@@ -97,17 +97,17 @@ exports.updateNode = async (req, res) => {
         where edgetarget = ${nodeId}`
     );
 
-    // const newNode = await pool.query(
-    //   `SELECT * FROM TRANSACTION WHERE nodeId=${nodeId}`
-    // );
+    const newNode = await pool.query(
+      `SELECT * FROM TRANSACTION WHERE nodeId=${nodeId}`
+    );
 
-    // result = newNode.rows;
+    result = newNode.rows;
 
     res.status(200).json({
       status: "success query",
-      //   data: {
-      //     result,
-      //   },
+      data: {
+        result,
+      },
     });
   } catch (error) {
     res.status(400).json({
