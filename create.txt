@@ -1,5 +1,5 @@
 CREATE TABLE EDGE(
-  nodeId SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   edgeSource INT,
   edgeTarget INT,
   edgeLabel VARCHAR(50),
@@ -39,3 +39,5 @@ CREATE TABLE NODE(
   nodeType VARCHAR(50),
   nodeLabel VARCHAR(50)
 );
+
+INSERT INTO EDGE(edgeSource, edgeTarget) VALUES(3,1)

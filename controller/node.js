@@ -35,8 +35,17 @@ exports.createNode = async (req, res) => {
       `INSERT INTO EDGE(edgeSource,edgeTarget) VALUES (3,${node.rows[0].nodeid})`
     );
 
+    const newNode = await pool.query(
+      `SELECT * FROM NODE WHERE nodeId=${node.rows[0].nodeid}`
+    );
+
+    const result = newNode.rows;
+
     res.status(200).json({
       status: "success query",
+      data: {
+        result,
+      },
     });
   } catch (error) {
     res.status(400).json({
@@ -90,8 +99,17 @@ exports.updateNode = async (req, res) => {
         where target = ${nodeId}`
     );
 
+    const newNode = await pool.query(
+      `SELECT * FROM TRANSACTION WHERE nodeId=${nodeId}`
+    );
+
+    newNode = result.rows;
+
     res.status(200).json({
       status: "success query",
+      data: {
+        result,
+      },
     });
   } catch (error) {
     res.status(400).json({
