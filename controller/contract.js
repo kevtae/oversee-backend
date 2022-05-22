@@ -119,7 +119,7 @@ exports.initialContract = async (req, res) => {
           const value = await convertValue(element.value, element.tokenSymbol);
 
           await pool.query(
-            `INSERT INTO TRANSACTION(blockNumber, timeStamp,hash,sentFrom,sentTo,contractAddress,sentValue,tokenName,tokenSymbol,gas,gasUsed,sentType,nodeId)\
+            `INSERT INTO TRANSACTION(blockNumber, timeStamp,hash,sentFrom,sentTo,contractAddress,sentValue,tokenName,tokenSymbol,gas,gasUsed,sentType,usdcPrice,nodeId)\
               VALUES (${element.blockNumber},${element.timeStamp},'${element.hash}','${element.from}','${element.to}','${element.contractAddress}','${value}','${element.tokenName}','${element.tokenSymbol}','${element.gas}','${element.gasUsed}','erc20','${value}','${node}')`
           );
         });

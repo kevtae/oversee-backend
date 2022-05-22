@@ -82,12 +82,10 @@ exports.updateNode = async (req, res) => {
     const { keyId } = req.body;
 
     keyId.forEach(async (element, index) => {
-      console.log(keyId[index]);
       await pool.query(
-        ` UPDATE TRANSACTION\
+        `UPDATE TRANSACTION\
            SET nodeid = ${nodeId} \
-           WHERE id = '${keyId[index]}';
-          `
+           WHERE id = '${keyId[index]}'`
       );
     });
 
@@ -99,17 +97,17 @@ exports.updateNode = async (req, res) => {
         where target = ${nodeId}`
     );
 
-    const newNode = await pool.query(
-      `SELECT * FROM TRANSACTION WHERE nodeId=${nodeId}`
-    );
+    // const newNode = await pool.query(
+    //   `SELECT * FROM TRANSACTION WHERE nodeId=${nodeId}`
+    // );
 
-    newNode = result.rows;
+    // result = newNode.rows;
 
     res.status(200).json({
       status: "success query",
-      data: {
-        result,
-      },
+      //   data: {
+      //     result,
+      //   },
     });
   } catch (error) {
     res.status(400).json({
