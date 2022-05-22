@@ -157,10 +157,9 @@ exports.initialContract = async (req, res) => {
 
       return [newEth, newUsdc];
     }
-
+    createNode();
     internalTx();
     tokenTx();
-    createNode();
     const balance = await getBalance();
     const query = await pool.query(`SELECT * FROM TRANSACTION`);
     const result = query.rows;
