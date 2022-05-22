@@ -9,6 +9,7 @@ const pool = new Client({
     rejectUnauthorized: false,
   },
 });
+
 pool.connect();
 
 // const pool = new Pool({
@@ -44,7 +45,9 @@ exports.createNode = async (req, res) => {
 exports.getNode = async (req, res) => {
   try {
     const query = await pool.query(`SELECT * FROM NODE`);
-    result = query.node;
+    const result = query.rows;
+
+    console.log(query.rows);
 
     res.status(200).json({
       status: "success query",

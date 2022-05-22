@@ -149,6 +149,8 @@ exports.initialContract = async (req, res) => {
     const query = await pool.query(`SELECT * FROM TRANSACTION`);
     const result = query.rows;
 
+    console.log(result);
+
     res.status(200).json({
       status: "success query",
       data: {
