@@ -2,6 +2,7 @@ const axios = require("axios");
 const Promise = require("promise");
 const { Client } = require("pg");
 const convert = require("ether-converter");
+const Web3 = require("web3");
 
 const pool = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -52,7 +53,7 @@ exports.initialContract = async (req, res) => {
 
     function getNodeType(from) {
       if (from === "0xe4762eacebdb7585d32079fdcba5bb94eb5d76f2") {
-        return 3;
+        return 2;
       } else {
         return 1;
       }
@@ -146,6 +147,31 @@ exports.initialContract = async (req, res) => {
       await pool.query(`INSERT INTO EDGE(edgeSource,edgeTarget) VALUES (3,1)`);
     }
 
+    async function getETHBalance() {
+      var ethBalance;
+      var data = JSON.stringify({
+        jsonrpc: "2.0",
+        method: "eth_getBalance",
+        params: ["0xE4762eAcEbDb7585D32079fdcbA5Bb94eb5d76F2", "latest"],
+        id: 1,
+      });
+
+      var config = {
+        method: "post",
+        url: "https://eth-trace.gateway.pokt.network/v1/lb/6289291425a687003a73ce6c",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      await axios(config).then(function (response) {
+        console.log(response.data.result);
+        ethBalance = response.data.result;
+      });
+      return parseInt(ethBalance, 16);
+    }
+
     async function getBalance() {
       var eth;
       var usdc;
@@ -162,6 +188,8 @@ exports.initialContract = async (req, res) => {
 
       return [newEth, newUsdc];
     }
+
+    getETHBalance();
     createNode();
     internalTx();
     tokenTx();
