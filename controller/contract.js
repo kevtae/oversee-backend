@@ -139,6 +139,8 @@ exports.initialContract = async (req, res) => {
         `INSERT INTO NODE(nodeName, url, description, nodePosition, nodeType, nodeLabel)\
             VALUES ('TREASUREY','https://www.dypeapp.com','DAO Contract Address','{ "x": 300, "y": 50 }','address','TREASUREY')`
       );
+
+      /// need to put edge query here later
     }
 
     async function getBalance() {
